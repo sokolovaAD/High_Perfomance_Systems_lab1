@@ -1,13 +1,17 @@
+#ifndef HEAP_H
+#define HEAP_H
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <omp.h>
 
-#define MAXL 1000
 
-//#define  root i+sh
-#define  left 2*i+1+sh
-#define right 2*i+2+sh
+void downHeap(long* a, long k, long n, long size, long info);
 
-void swap(int* a, int* b);
-void sort(int* a, int p, int q);
+void heapSort(long* a , long size);
+void heapSort2Threads(long* a , long size);
+void heapSortNThreads(long* a , long size, int thr);
 
-//void sort2Threads(int* a, int n);
-//void sortThreads(int* a, int n, int sh, int n, int root);
+
+#endif
+

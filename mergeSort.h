@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <math.h>
 #include <omp.h>
-void mergeSort(int* a, int p, int r);
-void merge(int* A, int p, int q, int r);
-void merge2Threads(int* a, int p, int r);
-void mergeNThreads(int* a, int p, int r, int thr);
-void finalMergeNThreads(int* a, int p, int r, int thr, int* checkPos);
+void mergeSort(long* a, long p, long r);
+void merge(long* A, long p, long q, long r);
+void merge2Threads(long* a, long p, long r);
+void mergeNThreads(long* a, long p, long r, long thr);
+void finalMergeNThreads(long* a, long p, long r, long thr, long* checkPos);
 
 #endif

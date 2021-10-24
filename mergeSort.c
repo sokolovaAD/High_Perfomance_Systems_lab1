@@ -1,9 +1,9 @@
 #include "./mergeSort.h"
 
-void mergeSort(int* a, int p, int r) {
+void mergeSort(long* a, long p, long r) {
     if (p >= r)
         return;
-    int q = (p + r) / 2;
+    long q = (p + r) / 2;
     mergeSort(a, p, q);
     mergeSort(a, q + 1, r);
     merge(a, p, q, r);
@@ -12,16 +12,18 @@ void mergeSort(int* a, int p, int r) {
 }
 
 
-void merge2Threads(int* a, int p, int r) {
-    int q = (p + r) / 2;
+void merge2Threads(long* a, long p, long r) {
+    long q = (p + r) / 2;
     #pragma omp parallel sections
     {
             #pragma omp section
             {
+                printf ("id = %d, \n", omp_get_thread_num());
                 mergeSort(a, p, q);
             }
             #pragma omp section 
             {
+               printf ("id = %d, \n", omp_get_thread_num());
                mergeSort(a, q+1, r);
             }
     }
@@ -30,12 +32,12 @@ void merge2Threads(int* a, int p, int r) {
 }
 
 
-void mergeNThreads(int* a, int p, int r, int thr) {
-    int tmp = (r + 1) % thr;
-    int *checkPos;
-    checkPos = (int*)malloc(sizeof(int) * (thr + 1));
+void mergeNThreads(long* a, long p, long r, long thr) {
+    long tmp = (r + 1) % thr;
+    long *checkPos;
+    checkPos = (long*)malloc(sizeof(long) * (thr + 1));
     checkPos[0] = 0;
-    for (int i = 0; i < thr; i++) {
+    for (long i = 0; i < thr; i++) {
         if (tmp != 0) {
             checkPos[i + 1] = checkPos[i]+((r+1) / thr)+1;
             tmp--;
@@ -46,10 +48,12 @@ void mergeNThreads(int* a, int p, int r, int thr) {
     }
     #pragma omp parallel 
     {
-        int n = thr, i = 0, j = 0, k = 1, ii = 0;
+        long n = thr;
+        long i = 0, j = 0, k = 1, ii = 0;
 
         #pragma omp for
             for (i = 0; i < n; i = i + 1) {
+                //printf ("id = %d, \n", omp_get_thread_num());
                  mergeSort(a, checkPos[i], checkPos[i + 1] - 1);
              }
         #pragma omp barrier
@@ -59,11 +63,12 @@ void mergeNThreads(int* a, int p, int r, int thr) {
 }
 
 
-void finalMergeNThreads(int* a, int p, int r, int thr, int* checkPos) {
+void finalMergeNThreads(long* a, long p, long r, long thr, long* checkPos) {
     #pragma omp parallel
     {
-        int n = thr, j = 0, jj = 0, k = 1;
-        int rounds = (int)log2(thr);
+        long n = thr;
+        long j = 0, jj = 0, k = 1;
+        long rounds = (long)log2(thr);
         while (k <= rounds) {
             jj = 0;
             #pragma omp for
@@ -79,23 +84,23 @@ void finalMergeNThreads(int* a, int p, int r, int thr, int* checkPos) {
 } 
 
 
-void merge(int* A, int p, int q, int r)
+void merge(long* A, long p, long q, long r)
 {
 
-    int n1 = q - p + 1;
-    int n2 = r - q;
+    long n1 = q - p + 1;
+    long n2 = r - q;
 
-    int* L = (int*)malloc(n1 * sizeof(int));
-    int* M = (int*)malloc(n2 * sizeof(int));
+    long* L = (long*)malloc(n1 * sizeof(long));
+    long* M = (long*)malloc(n2 * sizeof(long));
 
 
-    for (int i = 0; i < n1; i++)
+    for (long i = 0; i < n1; i++)
         L[i] = A[p + i];    
-    for (int j = 0; j < n2; j++)
+    for (long j = 0; j < n2; j++)
         M[j] = A[q + 1 + j];
 
 
-    int i, j, k;
+    long i, j, k;
     i = 0;
     j = 0;
     k = p;

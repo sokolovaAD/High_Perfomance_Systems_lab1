@@ -1,92 +1,106 @@
-#include "./mergeSort.h"
-#include "./heapSort.h"
+#include "mergeSort.h"
+#include "heapSort.h"
 #include <time.h>
+#include "logger.h"
+#include "loggerHeapSort.h"
+#include <string.h>
 
-void timeSort() {
-    unsigned int bigSize1 = 100 * 100 * 1000;
-    int* bigArr1 = (int*)malloc(bigSize1 * sizeof(int));
-    for (unsigned int i = 0; i < bigSize1; i++) {
-        bigArr1[i] = rand() % 10000;
+
+
+void timeSort(long bigSize) {
+    //unsigned int bigSize = 100 * 500 * 1000;
+    long* bigArr = (long*)malloc(bigSize * sizeof(long));
+    for (long i = 0; i < bigSize; i++) {
+        bigArr[i] = rand() % 10000;
     }
 
-    clock_t begin1 = clock();
+    clock_t begin = clock();
 
-    mergeSort(bigArr1, 0, bigSize1 - 1);
+    //heapSort(bigArr, bigSize);
+    mergeSort(bigArr,0,bigSize-1);
 
 
-    clock_t end1 = clock();
-    double time_spent1 = (double)(end1 - begin1) / CLOCKS_PER_SEC;
-    printf("Elapsed 1 thread: %f seconds\n", time_spent1);
-    free(bigArr1);
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("Elapsed 1 thread: %f seconds\n", time_spent);
+    //logger(1, bigSize, time_spent);
+    free(bigArr);
 
 }
 
 
-void time2Threads() {
-    unsigned int bigSize2 = 100 * 100 * 1000;
-    int* bigArr2 = (int*)malloc(bigSize2 * sizeof(int));
-    for (unsigned int i = 0; i < bigSize2; i++) {
-        bigArr2[i] = rand() % 10000;
+void time2Threads(long bigSize) {
+    //unsigned int bigSize = 100 * 500 * 1000;
+    long* bigArr = (long*)malloc(bigSize * sizeof(long));
+    for (long i = 0; i < bigSize; i++) {
+        bigArr[i] = rand() % 10000;
     }
 
-    clock_t begin2 = clock();
+    clock_t begin = clock();
 
-    merge2Threads(bigArr2, 0, bigSize2 - 1);
+    heapSort2Threads(bigArr, bigSize);
 
-    clock_t end2 = clock();
-    double time_spent2 = (double)(end2 - begin2) / CLOCKS_PER_SEC;
-    printf("Elapsed 2 Threads: %f seconds\n", time_spent2);
-    free(bigArr2);
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("Elapsed 2 Threads: %f seconds\n", time_spent);
+    //logger(2, bigSize, time_spent);
+    free(bigArr);
 }
 
 
-void time4Threads() {
-    unsigned int bigSize3 = 100 * 100 * 1000;
-    int* bigArr3 = (int*)malloc(bigSize3 * sizeof(int));
-    for (unsigned int i = 0; i < bigSize3; i++) {
-        bigArr3[i] = rand() % 10000;
+void timeNThreads(long bigSize, int num) {
+    //unsigned int bigSize = 100 * 500 * 1000;
+    long* bigArr = (long*)malloc(bigSize * sizeof(long));
+    for (long i = 0; i < bigSize; i++) {
+        bigArr[i] = rand() % 10000;
     }
 
-    clock_t begin3 = clock();
+    clock_t begin = clock();
 
-    mergeNThreads(bigArr3, 0, bigSize3 - 1, 4);
+    //heapSortNThreads(bigArr, bigSize, num);
+    mergeNThreads(bigArr, 0, bigSize-1, num);
 
-    clock_t end3 = clock();
-    double time_spent3 = (double)(end3 - begin3) / CLOCKS_PER_SEC;
-    printf("Elapsed 4 Threads: %f seconds\n", time_spent3);
-    free(bigArr3);
+    clock_t end = clock();
+    double time_spent = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("Elapsed 4 Threads: %f seconds\n", time_spent);
+    //logger(num, bigSize, time_spent, fp);
+    free(bigArr);
 }
 
 void main() {
-    printf("hello \n");
-    int arr[21] = {21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1 };
-    int arr1[8] = { 8, 7, 6, 5, 4, 3, 2, 1 };
+    
+    long size = 95000000;
 
+    printf("Start 1 Thread: \n");
+    //timeSort(size);
+    printf("End 1 Thread: \n");
+    printf(".............................. \n");
 
-    int a = 0;
-    int size = sizeof(arr) / sizeof(int) - 1;
-    int size1 = sizeof(arr1) / sizeof(int) - 1;
+    printf("Start 2 Threads using for: \n");
+    //timeNThreads(size, 2);
+    printf("End 2 Threads: \n");
+    printf(".............................. \n");
 
-    for (int i = 0; i <= size; i++) {
-        printf("%d", arr[i]);
-    }
-    printf("\n");
+    printf("Start 4 Threads using for: \n");
+    //timeNThreads(size, 2);
+    printf("End 4 Threads: \n");
+    printf(".............................. \n");
+    
 
-    //mergeSort(arr, a, size);
-    //merge2Threads(arr, a, size);
-    mergeNThreads(arr, a, size, 2); 
+   //logger();
+   //smallLogger();
 
-
-    for (int i = 0; i <= size; i++) {
-        printf("%d", arr[i]);
-    }
-    printf("\n");
-
-
-
-    timeSort();
-    time2Threads();
-    time4Threads();
+   long long arr[9] = {1,2,9,3,4,5,6,7,8};
+   long arr1[11] = {1,10,2,9,3,4,11,5,6,7,8};
+   //merge2Threads(arr,0,8);
+   //heapSort2Threads(arr1, 10);
+   //heapSort(arr1,11);
+   //heapSortNThreads(arr1,11,2);
+   for (int i=0;i<11;i++) {
+       printf("%d ", arr1[i]);
+   }
+   printf("\n");
+   //loggerHeapSort();
 
 
 }
