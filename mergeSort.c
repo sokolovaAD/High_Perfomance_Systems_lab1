@@ -1,5 +1,6 @@
 #include "./mergeSort.h"
 
+//разделяем до массивов размером 1 элемент
 void mergeSort(long* a, long p, long r) {
     if (p >= r)
         return;
@@ -12,6 +13,7 @@ void mergeSort(long* a, long p, long r) {
 }
 
 
+//два потока используя секции
 void merge2Threads(long* a, long p, long r) {
     long q = (p + r) / 2;
     #pragma omp parallel sections
@@ -32,8 +34,10 @@ void merge2Threads(long* a, long p, long r) {
 }
 
 
+//N потоков
 void mergeNThreads(long* a, long p, long r, long thr) {
     long tmp = (r + 1) % thr;
+    //создаем массив для хранения позиций в массиве, с которых начинается сортировка отедльным потоком
     long *checkPos;
     checkPos = (long*)malloc(sizeof(long) * (thr + 1));
     checkPos[0] = 0;
@@ -46,6 +50,8 @@ void mergeNThreads(long* a, long p, long r, long thr) {
             checkPos[i + 1] = checkPos[i]+((r+1) / thr);
 
     }
+    
+    //каждый поток берет свою часть массива и сортирует, на выходе получается N отсортированных массивов
     #pragma omp parallel 
     {
         long n = thr;
@@ -58,11 +64,12 @@ void mergeNThreads(long* a, long p, long r, long thr) {
              }
         #pragma omp barrier
     }
+    // если использовано больше одного потока, нужно отсортировать n отсортированных массивов
        if(thr>1)
             finalMergeNThreads(a, p, r, thr, checkPos);
 }
 
-
+// сортируем отсортированные потоками массивы
 void finalMergeNThreads(long* a, long p, long r, long thr, long* checkPos) {
     #pragma omp parallel
     {
@@ -84,6 +91,7 @@ void finalMergeNThreads(long* a, long p, long r, long thr, long* checkPos) {
 } 
 
 
+//сортируем
 void merge(long* A, long p, long q, long r)
 {
 
