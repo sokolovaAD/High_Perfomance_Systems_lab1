@@ -34,7 +34,7 @@ double logNThreads(long size, char opt) {
         return time_spent;
 }
 
-
+// вывод затраченного на сортировку времени в лог файл
 int logger() {
     FILE *fp;
     if ((fp = fopen("mergeSort.log", "w"))==NULL) {
