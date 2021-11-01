@@ -1,6 +1,6 @@
 #include "heapSort.h"
 
-
+// выносим наверх (в родителя) наибольший их родительского и дочерних элементов
 void downHeap(long* a, long k, long n, long size, long info) {
     long new_elem;
     long child;
@@ -20,7 +20,7 @@ void downHeap(long* a, long k, long n, long size, long info) {
 }
 
 
-
+// сортировка в два процесса используя секции
 void heapSort2Threads(long* a, long size) {
     long i;
     long temp1, temp2;
@@ -51,6 +51,7 @@ void heapSort2Threads(long* a, long size) {
             }
         }
         
+        // по окончании итерации двух процессов получаеются два наибольших элемента (по одному от каждого дерева), сравниваем и выбираем наибольший
         if (temp1 >= temp2) {
             a[0] = a[size - 1];
             a[size - 1] = temp1;
@@ -64,6 +65,7 @@ void heapSort2Threads(long* a, long size) {
 }
 
 
+// проходимся по родительским элементам и выносим самый большой, после чего меняем наибольший элемент с последним и сортируем новый массив (без последнего элемента)
 void heapSort(long* a, long size) {
     long i;
     long temp, info=size;
@@ -84,6 +86,7 @@ void heapSort(long* a, long size) {
 }
 
 
+// сортировка n процессами
 void heapSortNThreads(long* a, long size, int thr) {
     long sizes[thr];
     long info = size;
